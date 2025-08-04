@@ -11,6 +11,11 @@ const getAllPosts = (req, res) => {
         const filteredPosts = posts.filter(post => {
             return post.tags.some(t => t.toLowerCase() === tag.toLowerCase())
         });
+
+        if(filteredPosts.length === 0){
+            return res.status(404).json({ message: 'Nessun post trovato con il tag indicato' });
+        } 
+
         return res.json(filteredPosts);
     }
 
