@@ -17,7 +17,7 @@ const getPostById = (req, res) => {
 
     //Ritorno il post trovato
     res.json(post);
-}
+};
 
 //Creo un nuovo post 
 const createPost = (req, res) => {
@@ -40,7 +40,7 @@ const deletePost = (req, res) => {
 };
 
 //Esporto tutte le funzioni 
-module,exports = {
+module.exports = {
     getAllPosts,
     getPostById,
     createPost,
