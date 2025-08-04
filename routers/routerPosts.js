@@ -16,12 +16,12 @@ const {
 const posts = require('../data/posts.js');
 
 
-// GET /posts → restituisce tutti i post in JSON
+// GET /posts  restituisce tutti i post in JSON
 router.get("/", (req, res) => {
   res.json(posts);
 });
 
-// GET /posts/:id → restituisce il singolo post in JSON
+// GET /posts/:id  restituisce il singolo post in JSON
 router.get("/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const post = posts.find(p => p.id === id);
@@ -34,25 +34,27 @@ router.get("/:id", (req, res) => {
   res.json(post);
 });
 
-// POST /posts → crea un nuovo post
-router.post("/", (req, res) => {
-  res.send("Creazione di un nuovo post");
-});
+// Uso le funzioni dal controller direttamente nelle rotte
 
-// PUT /posts/:id → modifica completa del post
-router.put("/:id", (req, res) => {
-  res.send(`Modifica completa del post ${req.params.id}`);
-});
+// GET /posts
+router.get("/", getAllPosts);
 
-// PATCH /posts/:id → modifica parziale del post
-router.patch("/:id", (req, res) => {
-  res.send(`Modifica parziale del post ${req.params.id}`);
-});
+// GET /posts/:id
+router.get("/:id", getPostById);
 
-// DELETE /posts/:id → elimina un post
-router.delete("/:id", (req, res) => {
-  res.send(`Cancellazione del post ${req.params.id}`);
-});
+// POST /posts
+router.post("/", createPost);
+
+// PUT /posts/:id
+router.put("/:id", updatePost);
+
+// PATCH /posts/:id
+router.patch("/:id", partialUpdatePost);
+
+// DELETE /posts/:id
+router.delete("/:id", deletePost);
+
+module.exports = router;
 
 //esporto router 
 module.exports = router;
