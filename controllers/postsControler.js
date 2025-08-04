@@ -26,15 +26,25 @@ const createPost = (req, res) => {
 
 //Creo un nuovo post 
 const updatePost = (req, res) => {
-    res.send('Creazione di un nuovo post');
+    res.send(`Modifica completa del post ${req.params.id}`);
 };
 
 //Creo un nuovo post 
 const partialUpdatePost = (req, res) => {
-    res.send('Creazione di un nuovo post');
+    res.send(`Modifica parziale del post ${req.params.id}`);
 };
 
 //Creo un nuovo post 
 const deletePost = (req, res) => {
-    res.send('Creazione di un nuovo post');
+    res.send(`Cancellazione del post ${req.params.id}`);
 };
+
+//Esporto tutte le funzioni 
+module,exports = {
+    getAllPosts,
+    getPostById,
+    createPost,
+    updatePost,
+    partialUpdatePost,
+    deletePost,
+}
