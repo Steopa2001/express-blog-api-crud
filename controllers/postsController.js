@@ -1,5 +1,8 @@
 const posts = require("../data/posts");
 
+//importo array posts 
+const posts = require('../data/posts.js')
+
 //Prendo tutti i post 
 const getAllPosts = (req, res) => {
     res.json(posts);
