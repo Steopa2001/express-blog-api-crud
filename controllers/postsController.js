@@ -4,12 +4,12 @@ const posts = require('../data/posts.js')
 
 //Prendo tutti i post 
 const getAllPosts = (req, res) => {
-    const{ item } = req.query;
+    const{ tag } = req.query;
 
-    if(item) {
+    if(tag) {
         //Filtro i post che hanno il tag indicato 
         const filteredPosts = posts.filter(post => {
-            post.item.some(item => item.toLowerCase() === item.toLowerCase())
+            return post.tags.some(t => t.toLowerCase() === tag.toLowerCase())
         });
         return res.json(filteredPosts);
     }
