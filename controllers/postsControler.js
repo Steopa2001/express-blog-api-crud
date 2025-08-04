@@ -18,3 +18,23 @@ const getPostById = (req, res) => {
     //Ritorno il post trovato
     res.json(post);
 }
+
+//Creo un nuovo post 
+const createPost = (req, res) => {
+    res.send('Creazione di un nuovo post');
+};
+
+//Creo un nuovo post 
+const updatePost = (req, res) => {
+    res.send('Creazione di un nuovo post');
+};
+
+//Creo un nuovo post 
+const partialUpdatePost = (req, res) => {
+    res.send('Creazione di un nuovo post');
+};
+
+//Creo un nuovo post 
+const deletePost = (req, res) => {
+    res.send('Creazione di un nuovo post');
+};
