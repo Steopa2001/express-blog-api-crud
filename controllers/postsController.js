@@ -1,4 +1,3 @@
-const posts = require("../data/posts");
 
 //importo array posts 
 const posts = require('../data/posts.js')
@@ -8,7 +7,7 @@ const getAllPosts = (req, res) => {
     res.json(posts);
 };
 
-// Prendo un post per ID
+// Prendo un post per ID (show)
 const getPostById = (req, res) => {
     const id = parseInt(req.params.id);
     const post = posts.find(post => post.id === id);
@@ -27,19 +26,28 @@ const createPost = (req, res) => {
     res.send('Creazione di un nuovo post');
 };
 
-//Creo un nuovo post 
+//Modifica totale
 const updatePost = (req, res) => {
     res.send(`Modifica completa del post ${req.params.id}`);
 };
 
-//Creo un nuovo post 
+//Modifica parziale
 const partialUpdatePost = (req, res) => {
     res.send(`Modifica parziale del post ${req.params.id}`);
 };
 
-//Creo un nuovo post 
+//Cancellazione (Destroy)
 const deletePost = (req, res) => {
-    res.send(`Cancellazione del post ${req.params.id}`);
+   const id = parseInt(req.params.id);
+
+   const index = posts.findIndex(item => item.id === id);
+   if (index === -1) {
+    return res.status(404).json({ message: 'Post non trovato'})
+   }
+
+   posts.splice(index, 1);
+
+   res.status(204).send();
 };
 
 //Esporto tutte le funzioni 
