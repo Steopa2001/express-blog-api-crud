@@ -2,6 +2,16 @@
 const express = require('express');
 const router = express.Router();
 
+//importo le funzioni dal controller 
+const {
+    getAllPosts,
+    getPostById,
+    createPost,
+    updatePost,
+    partialUpdatePost,
+    deletePost,
+} = require('../controllers/postsControler.js')
+
 //importo array posts
 const posts = require('../data/posts.js');
 
