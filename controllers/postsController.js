@@ -67,5 +67,5 @@ module.exports = {
     createPost,
     updatePost,
     partialUpdatePost,
-    deletePost,
+    deletePost, 
 }
