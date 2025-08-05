@@ -21,6 +21,13 @@ const getAllPosts = (req, res) => {
     res.json(filteredPosts);
 };
 
+
+function store(req, res) {
+  console.log(req.body); 
+  res.send("Dati ricevuti");
+}
+
+
 // Prendo un post per ID (show)
 const getPostById = (req, res) => {
     const id = parseInt(req.params.id);
@@ -35,9 +42,34 @@ const getPostById = (req, res) => {
     res.json(post);
 };
 
-//Creo un nuovo post 
 const createPost = (req, res) => {
-    res.send('Creazione di un nuovo post');
+  const { title, content, image, tags } = req.body;
+
+  // Controllo campi obbligatori
+  if (!title || !content) {
+    return res.status(400).json({ message: "Titolo e contenuto sono obbligatori" });
+  }
+
+  // Genera un nuovo ID incrementale
+  const nuovoId = posts.length > 0 ? posts[posts.length - 1].id + 1 : 1;
+
+  // Creo il nuovo post
+  const nuovoPost = {
+    id: nuovoId,
+    title,
+    content,
+    image: image || '',
+    tags: tags || []
+  };
+
+  // Aggiungo il post all'array
+  posts.push(nuovoPost);
+
+  // Log per debug
+  console.log('Post aggiunto:', nuovoPost);
+
+  // Rispondo con il post creato e status 201
+  res.status(201).json(nuovoPost);
 };
 
 //Modifica totale
