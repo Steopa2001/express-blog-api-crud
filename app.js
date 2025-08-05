@@ -8,6 +8,9 @@ const port = 3001;
 app.use(express.static('public'));
 
 
+// Middleware
+app.use(express.json());
+
 //Creo una rotta Get per ottenere un testo
 app.get('/', (req, res) => {
     res.send('Server del mio blog');
