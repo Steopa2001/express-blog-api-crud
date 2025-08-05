@@ -74,7 +74,30 @@ const createPost = (req, res) => {
 
 //Modifica totale
 const updatePost = (req, res) => {
-    res.send(`Modifica completa del post ${req.params.id}`);
+  const id = parseInt(req.params.id);
+  const { title, content, image, tags } = req.body;
+
+  const index = posts.findIndex(post => post.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ message: 'Post non trovato' });
+  }
+
+  if (!title || !content) {
+    return res.status(400).json({ message: 'Titolo e contenuto sono obbligatori' });
+  }
+
+  const updatedPost = {
+    id,
+    title,
+    content,
+    image: image || '',
+    tags: tags || []
+  };
+
+  posts[index] = updatedPost;
+
+  res.json(updatedPost);
 };
 
 //Modifica parziale
