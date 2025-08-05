@@ -1,92 +1,98 @@
+// Importo l'array di post da un file esterno
+const posts = require('../data/posts.js');
 
-//importo array posts 
-const posts = require('../data/posts.js')
-
-//Prendo tutti i post 
+// Funzione per ottenere tutti i post, con filtro opzionale per tag
 const getAllPosts = (req, res) => {
-    const tag = req.query.tag;
+    const tag = req.query.tag; // Leggo il parametro 'tag' dalla query string
 
-    let filteredPosts = posts;
+    let filteredPosts = posts; // Parto con tutti i post
 
-   if (tag) {
-    filteredPosts = posts.filter(item => {
-        return item.tags.map(t => t.toLowerCase()).includes(tag.toLowerCase());
-    });
+    // Se il tag è presente nella query, filtro i post che lo contengono
+    if (tag) {
+        filteredPosts = posts.filter(item => {
+            // Converto i tag in minuscolo per confronto case-insensitive
+            return item.tags.map(t => t.toLowerCase()).includes(tag.toLowerCase());
+        });
 
-    if (filteredPosts.length === 0) {
-        return res.status(404).json({ message: 'Nessun post trovato con il tag indicato' });
+        // Se non ci sono post con quel tag, ritorno errore 404
+        if (filteredPosts.length === 0) {
+            return res.status(404).json({ message: 'Nessun post trovato con il tag indicato' });
+        }
     }
-}
 
+    // Ritorno i post filtrati (o tutti se nessun tag era presente)
     res.json(filteredPosts);
 };
 
-
+// Funzione per ricevere dati (simula il salvataggio, utile per debug/test)
 function store(req, res) {
-  console.log(req.body); 
-  res.send("Dati ricevuti");
+  console.log(req.body); // Stampo i dati ricevuti nel corpo della richiesta
+  res.send("Dati ricevuti"); // Risposta semplice al client
 }
 
-
-// Prendo un post per ID (show)
+// Funzione per ottenere un singolo post tramite ID
 const getPostById = (req, res) => {
-    const id = parseInt(req.params.id);
-    const post = posts.find(post => post.id === id);
+    const id = parseInt(req.params.id); // Leggo l'ID dalla URL
+    const post = posts.find(post => post.id === id); // Cerco il post con quell'ID
 
-    //Se non trovo il post, da errore 404
-    if(!post){
+    // Se il post non esiste, ritorno errore 404
+    if (!post) {
         return res.status(404).json({ message: 'Post non trovato' });
     }
 
-    //Ritorno il post trovato
+    // Se il post esiste, lo ritorno come risposta
     res.json(post);
 };
 
+// Funzione per creare un nuovo post
 const createPost = (req, res) => {
-  const { title, content, image, tags } = req.body;
+  const { title, content, image, tags } = req.body; // Estraggo i dati dal corpo della richiesta
 
-  // Controllo campi obbligatori
+  // Controllo che title e content siano presenti
   if (!title || !content) {
     return res.status(400).json({ message: "Titolo e contenuto sono obbligatori" });
   }
 
-  // Genera un nuovo ID incrementale
+  // Genero un nuovo ID: se ci sono già post, prendo l'ultimo e aggiungo 1
   const nuovoId = posts.length > 0 ? posts[posts.length - 1].id + 1 : 1;
 
-  // Creo il nuovo post
+  // Creo il nuovo oggetto post
   const nuovoPost = {
     id: nuovoId,
     title,
     content,
-    image: image || '',
-    tags: tags || []
+    image: image || '', // Se manca l'immagine, uso stringa vuota
+    tags: tags || []     // Se mancano i tag, uso array vuoto
   };
 
-  // Aggiungo il post all'array
+  // Aggiungo il nuovo post all'array dei post
   posts.push(nuovoPost);
 
-  // Log per debug
+  // Stampo il nuovo post nella console (debug)
   console.log('Post aggiunto:', nuovoPost);
 
-  // Rispondo con il post creato e status 201
+  // Rispondo con lo stato 201 (creato) e il post appena creato
   res.status(201).json(nuovoPost);
 };
 
-//Modifica totale
+// Funzione per aggiornare completamente un post esistente
 const updatePost = (req, res) => {
-  const id = parseInt(req.params.id);
-  const { title, content, image, tags } = req.body;
+  const id = parseInt(req.params.id); // Leggo l'ID dalla URL
+  const { title, content, image, tags } = req.body; // Dati aggiornati dal corpo della richiesta
 
-  const index = posts.findIndex(post => post.id === id);
+  const index = posts.findIndex(post => post.id === id); // Cerco l'indice del post
 
+  // Se non trovo il post, ritorno errore 404
   if (index === -1) {
     return res.status(404).json({ message: 'Post non trovato' });
   }
 
+  // Se mancano title o content, ritorno errore 400 (bad request)
   if (!title || !content) {
     return res.status(400).json({ message: 'Titolo e contenuto sono obbligatori' });
   }
 
+  // Creo l'oggetto aggiornato
   const updatedPost = {
     id,
     title,
@@ -95,33 +101,37 @@ const updatePost = (req, res) => {
     tags: tags || []
   };
 
+  // Sostituisco il vecchio post con quello nuovo
   posts[index] = updatedPost;
 
+  // Ritorno il post aggiornato
   res.json(updatedPost);
 };
 
-//Modifica parziale
+// Funzione per modifica parziale di un post (placeholder)
 const partialUpdatePost = (req, res) => {
     res.send(`Modifica parziale del post ${req.params.id}`);
 };
 
-//Cancellazione (Destroy)
- const deletePost = (req, res) => {
-    const id = parseInt(req.params.id);
+// Funzione per cancellare un post
+const deletePost = (req, res) => {
+    const id = parseInt(req.params.id); // Leggo l'ID dalla URL
 
-    const index = posts.findIndex(item => item.id === id);
+    const index = posts.findIndex(item => item.id === id); // Cerco l'indice del post
 
+    // Se non trovo il post, ritorno errore 404
     if (index === -1) {
         return res.status(404).json({ message: 'Post non trovato' });
     }
 
+    // Rimuovo il post dall'array
     posts.splice(index, 1);
 
+    // Ritorno stato 204 (nessun contenuto)
     res.status(204).send();
 };
 
-
-//Esporto tutte le funzioni 
+// Esporto tutte le funzioni per poterle usare in altri file
 module.exports = {
     getAllPosts,
     getPostById,
@@ -129,4 +139,4 @@ module.exports = {
     updatePost,
     partialUpdatePost,
     deletePost, 
-}
+};
