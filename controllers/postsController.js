@@ -4,22 +4,21 @@ const posts = require('../data/posts.js')
 
 //Prendo tutti i post 
 const getAllPosts = (req, res) => {
-    const{ tag } = req.query;
+    const tag = req.query.tag;
 
-    if(tag) {
-        //Filtro i post che hanno il tag indicato 
-        const filteredPosts = posts.filter(post => {
-            return post.tags.some(t => t.toLowerCase() === tag.toLowerCase())
-        });
+    let filteredPosts = posts;
 
-        if(filteredPosts.length === 0){
-            return res.status(404).json({ message: 'Nessun post trovato con il tag indicato' });
-        } 
+   if (tag) {
+    filteredPosts = posts.filter(item => {
+        return item.tags.map(t => t.toLowerCase()).includes(tag.toLowerCase());
+    });
 
-        return res.json(filteredPosts);
+    if (filteredPosts.length === 0) {
+        return res.status(404).json({ message: 'Nessun post trovato con il tag indicato' });
     }
+}
 
-    res.json(posts);
+    res.json(filteredPosts);
 };
 
 // Prendo un post per ID (show)
@@ -52,18 +51,20 @@ const partialUpdatePost = (req, res) => {
 };
 
 //Cancellazione (Destroy)
-const deletePost = (req, res) => {
-   const id = parseInt(req.params.id);
+ const deletePost = (req, res) => {
+    const id = parseInt(req.params.id);
 
-   const index = posts.findIndex(item => item.id === id);
-   if (index === -1) {
-    return res.status(404).json({ message: 'Post non trovato'})
-   }
+    const index = posts.findIndex(item => item.id === id);
 
-   posts.splice(index, 1);
+    if (index === -1) {
+        return res.status(404).json({ message: 'Post non trovato' });
+    }
 
-   res.status(204).send();
+    posts.splice(index, 1);
+
+    res.status(204).send();
 };
+
 
 //Esporto tutte le funzioni 
 module.exports = {
