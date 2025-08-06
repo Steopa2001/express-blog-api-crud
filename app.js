@@ -33,6 +33,12 @@ app.get('/bacheca', (req, res) => {
     res.json({posts});
 });
 
+// Middleware per rotte non trovate
+// Se nessuna rotta precedente ha risposto, arriva qui
+app.use((req, res, next) => {
+    res.status(404).json({ error: 'Rotta non trovata' });
+});
+
 // Middleware per gestione errori interni
 // Se in una rotta viene generato un errore o usato next(err), finisce qui
 app.use((err, req, res, next) => {
