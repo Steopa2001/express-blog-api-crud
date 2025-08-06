@@ -33,6 +33,12 @@ app.get('/bacheca', (req, res) => {
     res.json({posts});
 });
 
+// Middleware per gestione errori interni
+// Se in una rotta viene generato un errore o usato next(err), finisce qui
+app.use((err, req, res, next) => {
+    console.error(err);
+    res.status(500).json({ error: 'Errore del server' });
+});
 
 
 //avvio il server in ascolto sulla porta 3001
