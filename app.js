@@ -33,19 +33,13 @@ app.get('/bacheca', (req, res) => {
     res.json({posts});
 });
 
-// Middleware per rotte non trovate
-// Se nessuna rotta precedente ha risposto, arriva qui
-app.use((req, res, next) => {
-    res.status(404).json({ error: 'Rotta non trovata' });
-});
+// Importo i middleware esterni
+const notFound = require('./middlewares/notFound');
+const errorsHandler = require('./middlewares/errorsHandler');
 
-// Middleware per gestione errori interni
-// Se in una rotta viene generato un errore o usato next(err), finisce qui
-app.use((err, req, res, next) => {
-    console.error(err);
-    res.status(500).json({ error: 'Errore del server' });
-});
-
+// Uso i middleware
+app.use(notFound);
+app.use(errorsHandler);
 
 //avvio il server in ascolto sulla porta 3001
 app.listen(port, () => {
