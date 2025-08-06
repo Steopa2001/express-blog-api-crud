@@ -53,16 +53,16 @@ const createPost = (req, res) => {
     return res.status(400).json({ message: "Titolo e contenuto sono obbligatori" });
   }
 
-  // Genero un nuovo ID: se ci sono già post, prendo l'ultimo e aggiungo 1
-  const nuovoId = posts.length > 0 ? posts[posts.length - 1].id + 1 : 1;
+  // Genero un nuovo ID da inserire nell'array
+  const nuovoId = posts[posts.length -1].id + 1;
 
   // Creo il nuovo oggetto post
   const nuovoPost = {
     id: nuovoId,
     title,
     content,
-    image: image || '', // Se manca l'immagine, uso stringa vuota
-    tags: tags || []     // Se mancano i tag, uso array vuoto
+    image,
+    tags
   };
 
   // Aggiungo il nuovo post all'array dei post
@@ -80,10 +80,10 @@ const updatePost = (req, res) => {
   const id = parseInt(req.params.id); // Leggo l'ID dalla URL
   const { title, content, image, tags } = req.body; // Dati aggiornati dal corpo della richiesta
 
-  const index = posts.findIndex(post => post.id === id); // Cerco l'indice del post
+  const post = posts.find(item => item.id === id); // Cerco l'indice del post
 
   // Se non trovo il post, ritorno errore 404
-  if (index === -1) {
+  if (!post) {
     return res.status(404).json({ message: 'Post non trovato' });
   }
 
@@ -97,8 +97,8 @@ const updatePost = (req, res) => {
     id,
     title,
     content,
-    image: image || '',
-    tags: tags || []
+    image,
+    tags
   };
 
   // Sostituisco il vecchio post con quello nuovo

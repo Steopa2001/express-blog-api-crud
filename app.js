@@ -8,7 +8,7 @@ const port = 3001;
 app.use(express.static('public'));
 
 
-// Middleware
+// Permettiamo ad express di interpretare il contenuto del body
 app.use(express.json());
 
 //Creo una rotta Get per ottenere un testo
