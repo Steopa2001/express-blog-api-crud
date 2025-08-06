@@ -7,6 +7,9 @@ const port = 3001;
 //inserisco il middleware per i file statici
 app.use(express.static('public'));
 
+// Importo i middleware esterni
+const notFound = require('./middlewares/notFound');
+const errorsHandler = require('./middlewares/errorsHandler');
 
 // Permettiamo ad express di interpretare il contenuto del body
 app.use(express.json());
@@ -33,9 +36,7 @@ app.get('/bacheca', (req, res) => {
     res.json({posts});
 });
 
-// Importo i middleware esterni
-const notFound = require('./middlewares/notFound');
-const errorsHandler = require('./middlewares/errorsHandler');
+
 
 // Uso i middleware
 app.use(notFound);
